@@ -14,16 +14,23 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long idx;
-    String image;
-    String userId;
-    String password;
+    private Long idx;
+    private String image;
+    private String userId;
+    private String password;
     @Temporal(TemporalType.TIMESTAMP)
-    Date regDate;
-    Date uptDate;
+    private Date regDate;
+    private Date uptDate;
+    @Setter
+    private Date workDate;
+    @Setter
+    private boolean workIn;
+    @Setter
+    private boolean workOut;
+
 
     @PrePersist
     protected void onCreate() {
-        regDate = new Date(); // 현재 시간을 설정
+        regDate = new Date();
     }
 }

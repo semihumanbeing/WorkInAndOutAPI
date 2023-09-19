@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Builder
 @Data
@@ -14,11 +15,13 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
-    Long idx;
-    String image;
-    String userId;
-    String password;
-    Timestamp regDate;
-    Timestamp uptDate;
-
+    private Long idx;
+    private String image;
+    private String userId;
+    private String password;
+    private Timestamp regDate;
+    private Timestamp uptDate;
+    private Timestamp workDate;
+    private boolean workIn;
+    private boolean workOut;
 }

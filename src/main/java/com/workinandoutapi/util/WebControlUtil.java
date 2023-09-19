@@ -43,8 +43,17 @@ public class WebControlUtil {
             driver.findElement(By.name("password")).sendKeys(password);
             driver.findElement(By.name("password")).sendKeys(Keys.ENTER);
             Thread.sleep(5000);
-            driver.findElement(By.id("gpopupLayer")).findElement(By.tagName("a")).click();
-            driver.findElement(By.className("welcome_nav")).findElement(By.tagName("a")).click();
+            try {
+                driver.findElement(By.id("gpopupLayer")).findElement(By.tagName("a")).click();
+                driver.findElement(By.id("advancedGuideLayer")).findElement(By.tagName("a")).click();
+            } catch (NoSuchElementException e) {
+                System.out.println("no advancedGuideLayer");
+            }
+            try {
+                driver.findElement(By.className("welcome_nav")).findElement(By.tagName("a")).click();
+            } catch (NoSuchElementException e) {
+                System.out.println("no welcome_nav");
+            }
             driver.get("https://cubox.daouoffice.com/app/ehr");
             Thread.sleep(3000);
             driver.findElement(By.className("go_wrap"))
@@ -56,9 +65,10 @@ public class WebControlUtil {
                     .click();
             return true;
         } catch (Exception e){
+            e.printStackTrace();
             return false;
         } finally {
-            driver.quit();
+            closeDriver();
         }
     }
 
@@ -74,8 +84,17 @@ public class WebControlUtil {
             driver.findElement(By.name("password")).sendKeys(password);
             driver.findElement(By.name("password")).sendKeys(Keys.ENTER);
             Thread.sleep(5000);
-            driver.findElement(By.id("gpopupLayer")).findElement(By.tagName("a")).click();
-            driver.findElement(By.className("welcome_nav")).findElement(By.tagName("a")).click();
+            try {
+                driver.findElement(By.id("gpopupLayer")).findElement(By.tagName("a")).click();
+                driver.findElement(By.id("advancedGuideLayer")).findElement(By.tagName("a")).click();
+            } catch (NoSuchElementException e) {
+                System.out.println("no advancedGuideLayer");
+            }
+            try {
+                driver.findElement(By.className("welcome_nav")).findElement(By.tagName("a")).click();
+            } catch (NoSuchElementException e) {
+                System.out.println("no welcome_nav");
+            }
             driver.get("https://cubox.daouoffice.com/app/ehr");
             Thread.sleep(3000);
             driver.findElement(By.className("go_wrap"))
@@ -87,6 +106,7 @@ public class WebControlUtil {
                     .click();
             return true;
         } catch (Exception e){
+            e.printStackTrace();
             return false;
         } finally {
             closeDriver();
@@ -140,10 +160,8 @@ public class WebControlUtil {
             Map<String, Boolean> resMap = new HashMap<>();
             resMap.put("in", workInResult);
             resMap.put("out", workOutResult);
-            closeDriver();
             return resMap;
         } catch (Exception e){
-            closeDriver();
             throw new RuntimeException("chrome driver error!" + e.getMessage());
         } finally {
             closeDriver();

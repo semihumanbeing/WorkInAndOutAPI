@@ -12,12 +12,14 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService{
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final WebControlService webControlService;
     AESEncryptor encryptor = new AESEncryptor();
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, WebControlService webControlService) {
         this.userRepository = userRepository;
+        this.webControlService = webControlService;
     }
 
     @Override

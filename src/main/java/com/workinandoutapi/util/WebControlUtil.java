@@ -6,6 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Component;
 
+import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,13 +46,18 @@ public class WebControlUtil {
             Thread.sleep(5000);
             try {
                 driver.findElement(By.id("gpopupLayer")).findElement(By.tagName("a")).click();
+            } catch (Exception e) {
+                System.out.println("no gpopupLayer");
+            }
+            try {
+
                 driver.findElement(By.id("advancedGuideLayer")).findElement(By.tagName("a")).click();
-            } catch (NoSuchElementException e) {
+            } catch (Exception e) {
                 System.out.println("no advancedGuideLayer");
             }
             try {
                 driver.findElement(By.className("welcome_nav")).findElement(By.tagName("a")).click();
-            } catch (NoSuchElementException e) {
+            } catch (Exception e) {
                 System.out.println("no welcome_nav");
             }
             driver.get("https://cubox.daouoffice.com/app/ehr");

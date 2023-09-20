@@ -5,6 +5,7 @@ import com.workinandoutapi.entity.UserRepository;
 import com.workinandoutapi.util.AESEncryptor;
 import com.workinandoutapi.util.WebControlUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -46,7 +47,7 @@ public class WebControlServiceImpl implements WebControlService {
 
     @Override
     public Map<String, Boolean> getStatus(String userId) throws Exception {
-        Optional<User> oUser = userRepository.findByUserId(userId);
+        Optional<User> oUser = userRepository.findByUserId(userId.trim());
         User user = oUser.orElseThrow(() -> new RuntimeException("Cannot find user information"));
         String password = encryptor.decrypt(user.getPassword());
 
@@ -63,8 +64,6 @@ public class WebControlServiceImpl implements WebControlService {
 
         // 오늘의 날짜와 getWorkDate의 날짜를 비교
         // 날짜가 비어있으면 새로 조회
-
-
         if (workDate != null && workDate.compareTo(todayStart) >= 0) {
             // 오늘 조회 된 적 있으면 DB에 있는 내용 반환
             resMap.put("in", user.isWorkIn());
@@ -74,17 +73,20 @@ public class WebControlServiceImpl implements WebControlService {
             // 오늘 조회 된 적 없으면 출,퇴근 전부 활성화로 결과 전달하고 크롬드라이버 조회 결과를 DB에 저장
             resMap.put("in", false);
             resMap.put("out", false);
-
-            // todo 확인하는 부분 비동기로
-            Map<String, Boolean> workInOutMap = webControlUtil.checkWorkIn(userId, password);
-            user.setWorkIn(workInOutMap.get("in"));
-            user.setWorkOut(workInOutMap.get("out"));
-            user.setWorkDate(new Date());
-            userRepository.save(user);
-
+            acyncCheck(userId, password, user);
             return resMap;
         }
-
-
     }
+
+    @Async
+    public void acyncCheck(String userId, String password, User user) {
+        // todo 확인하는 부분 비동기로
+        Map<String, Boolean> workInOutMap = webControlUtil.checkWorkIn(userId, password);
+        user.setWorkIn(workInOutMap.get("in"));
+        user.setWorkOut(workInOutMap.get("out"));
+        user.setWorkDate(new Date());
+        userRepository.save(user);
+    }
+
+
 }
